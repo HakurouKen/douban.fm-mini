@@ -1,0 +1,427 @@
+#fm-player-container{
+	background-color: white;
+	position: relative;
+	$player_width: 510px;
+	$img_size: 245px;
+	width: $player_width;
+	height: $img_size;
+	margin: 15px auto;
+	-webkit-user-select: none;
+	
+	a{
+		color: #53AD53;
+		&:hover,&:active,&:focus{
+			color: #7CCA6F;
+		}
+		&:hover{
+			background: transparent;
+		}
+	}
+
+	div.fm-player{
+		$player_radius: 3px;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 510px;
+		height: 245px;
+		line-height: 1.35;
+		border-radius: $player_radius;
+		box-shadow: 0 0 20px rgba(0,0,0,0.2);
+		cursor: default;
+
+		div.cover{
+			float: left;
+			position: relative;
+			cursor: pointer;
+			width: $img_size;
+			height: $img_size;
+			text-align: center;
+			overflow: hidden;
+			line-height: $img_size;			
+
+			img{
+				border-radius: $player_radius;
+				border: 0;
+				vertical-align: middle;
+				width: $img_size;
+				height: $img_size;
+			}
+
+			&:after{
+				$h : 25px;
+				$w : 120px;
+				content: "";
+				display: block;
+				position: absolute;
+				width: $w;
+				height: $h;
+				line-height: $h;
+				text-align: center;
+				top: ($img_size - $h) * 0.5;
+				left: ($img_size - $w) * 0.5;
+				background: transparent;
+				border-radius: 2px;
+				font-size: 12px;
+				color: #ADADAD;
+				-webkit-animation-delay: 0.5s;
+				animation-delay: 0.5s;
+				-webkit-transition: all 0.2s ease-out;
+				transition: all 0.2s ease-out;
+			}
+
+			&:hover:after{
+				content: "\67e5\770b\4e13\8f91\4fe1\606f";
+				background: rgba(30,30,30,.6);
+			}
+
+			&:before{
+				content: "";
+				display: block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: $img_size;
+				height: $img_size;
+				background: transparent;
+				text-align: center;
+				-webkit-animation-delay: 0.5s;
+				animation-delay: 0.5s;
+				-webkit-transition: all 0.2s ease-out;
+				transition: all 0.2s ease-out;				
+			}
+
+			&:hover:before{
+				background: rgba(50,50,50,.4);
+			}
+		}
+
+		div.player-container{
+			height: $img_size;
+			margin-left: $img_size;
+
+			div.content{
+				$mgLeft : 20px;
+				margin-left: $mgLeft;	
+				padding-top: 28px;
+				width: $player_width - $img_size - $mgLeft;
+				
+				div.infos{
+					height: 88px;
+					$titleWidth: 220px;
+
+					h4.artist{
+						font-size: 23px;
+						color: #555;
+						text-shadow: 0 0 1px #A8A8A8;
+						width: $titleWidth;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					}
+		
+					div.album{
+						font-size: 13px;
+						color: #555;
+						text-shadow: 0 0 1px rgba(0,0,0,0.16);
+						
+						p.album-title,p.year{
+							display:inline;
+						}
+					}
+		
+					p.title-roller{
+						padding-top: 20px;
+						font-size: 12px;
+						width: $titleWidth;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						text-shadow: 0 0 1px rgba(40,40,40,0.3);
+						cursor: pointer;
+			 		}
+				}
+				div.player-wrapper{
+					height: 10px;
+					display: table-cell;
+					background-color: transparent;
+
+					div.player{
+						margin-top: 5px;
+						margin-bottom: 5px;
+						width: 220px;
+						height: 1px;
+						border: 1px solid #F0F0F0;
+						overflow: hidden;
+
+						.load-progress{
+							height: 100%;
+							background-color: #D3D3D3;
+
+							.play-progress{
+								height: 100%;
+								background-color: #61B461;
+							}
+						}
+					}
+				}
+
+
+				a.btn{
+					display: inline-block;
+					height: 30px;
+					width: 30px;
+					margin: 0 12px;
+					vertical-align: top;
+					text-decoration: none;
+					background-color: transparent;
+					background-image: url(../image/buttons.png);
+
+					&.pause{
+						position: absolute;
+						top: -1px;
+						right: 15px;
+						background-position: -150px 0px;
+
+						&:hover{
+							background-position: -150px 30px;
+						}
+					}
+
+					&.prev{
+						background-position: 0px 0px;
+
+						&:hover{
+							background-position: 0px 30px;
+						}
+					}
+
+					&.heart{
+						background-position: -30px 0px;
+
+						&:hover{
+							background-position: -30px 30px;
+						}
+
+						&.hearted{
+							background-position: -60px 0px;
+
+							&:hover{
+								background-position: -60px 30px;
+							}
+						}
+					}
+
+					&.trash{
+						background-position: -90px 0px;
+
+						&:hover{
+							background-position: -90px 30px;
+						}
+					}
+
+					&.next{
+						background-position: -120px 0px;
+
+						&:hover{
+							background-position: -120px 30px;
+						}
+					}
+				}
+
+				div.controller{
+					position: relative;
+
+					div.volume-wrapper{
+						display: table-cell;
+						height: 12px;
+						width: 65px;
+						position: absolute;
+						top: -1px;
+						right: 24px;
+						overflow: hidden;
+
+						div.volume{
+							width: 0px;
+							height: 3px;
+							float: right;
+							position: relative;
+							top: 5px;
+							background-color: #F0F0F0;
+							transition: all 0.2s ease-out; 
+							
+							&:before{
+								content: "";
+								display: block;
+								position: absolute;
+								top: -4px;
+								left: -12px;
+								width: 10px;
+								height: 10px;
+								background-image: url(../image/volume.png);
+							}
+
+							&>.current-volume{
+								background-color: rgba(170, 170, 170, 0.75);
+								width: 100%;
+								height: 3px;
+							}
+						}
+
+						p.time{
+							font-size: 12px;
+							-webkit-transform: scale(0.9);
+							position: absolute;
+							top: -2px;
+							right: 15px;
+							color: #999;
+							opacity: 100%;
+							transition: all 0.2s ease-out;
+						}
+
+						&:hover{
+							div.volume{
+								width: 50px;
+							}
+							p.time{
+								opacity: 0;
+							}
+						}
+					}
+
+					div.btn-group{
+						margin: 2px;
+						font-size: 0;
+						position: relative;
+						top: 50px;
+						float: left;
+
+						a.btn{
+							&:hover:before{
+								position: relative;
+								top: -18px;
+								left: -14px;
+								display: block;
+								width: 60px;
+								height: 20px;
+								font-size: 13px;
+								text-align: center;
+								color: #333;
+								text-shadow: 0 0 1px #666;
+								transition: opacity 0.2s ease-out;
+								transition-delay: 0.2s;
+								opacity: 1;
+							}
+							&:before{
+								opacity: 0;
+							}
+
+							&.prev:before{
+								content: "\4e0a\4e00\9996";
+							}
+
+							&.heart:before{
+								content: "\559c\6b22";
+							}
+
+							&.heart.hearted:before{
+								content: "\53d6\6d88\559c\6b22";
+							}
+
+							&.trash:before{
+								content: "\4e0d\518d\64ad\653e";
+							}
+
+							&.next:before{
+								content: "\4e0b\4e00\9996";
+							}
+						}
+					}
+				}
+			}
+
+			&.paused::before{
+				content: "\7ee7\7eed\6536\542c\0020 >";
+				position: absolute;
+				display: block;
+				width: 265px;
+				height: 245px;
+				z-index: 9;
+				background: rgba(255,255,255,.75);
+				line-height: 245px;
+				font-size: 12px;
+				color: #333;
+				text-align: center;
+				opacity: 0.8;
+			}
+		}
+	}
+
+	div.extra-btn{
+		position: relative;
+		top: $img_size + 3px;
+		font-size: 14px;
+		text-shadow: 0 0 2px rgba(100, 194, 47, 0.5);
+		line-height: 20px;
+		vertical-align: middle;
+
+		a.loop{
+			position: relative;
+			margin-left: 35px;
+			-webkit-transition: all 0.2s ease-out;
+
+			&:before{
+				content: "";
+				display: block;
+				width: 20px;
+				height: 20px;
+				position: absolute;
+				left: -25px;
+				top: -1px;
+				background-image: url(../image/loop.png);
+			}
+
+			&.on{
+				&:before{
+					background-position: 0 0px;
+				}
+			}
+
+			&.off{
+				color: #333;
+				text-shadow: 0 0 2px rgba(0,0,0,0.5);
+
+				&:hover{
+					color: #222;
+				}
+
+				&:before{
+					background-position: 0 20px;
+				}
+			}
+		}
+
+		a.download{
+			float: right;
+			position: relative;
+			right: 15px;
+
+			&:before{
+				content: "";
+				display: block;
+				width: 20px;
+				height: 20px;
+				position: absolute;
+				left: -25px;
+				top: 1px;
+				background-image:  url(../image/download.png);
+			}
+		}
+	}
+}
+
+body{
+	width: 540px;
+	height: 295px;
+}

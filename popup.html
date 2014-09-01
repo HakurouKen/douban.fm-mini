@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Douban FM</title>
+	<link rel="stylesheet" href="dist/style/reset.css">
+	<link rel="stylesheet" href="dist/style/player.css">
+	<link rel="stylesheet" href="dist/style/hint.css">
+	<link rel="stylesheet" href="dist/style/channel.css">
+</head>
+<body>
+<div class="wrapper">
+	<div id="fm-player-container" onselectstart="return false">
+		<div class="fm-player">
+			<div class="cover">
+				<img src="" alt="">
+			</div>
+			<div class="player-container">
+				<div class="content">
+					<a class="btn pause"></a>
+					<div class="infos">
+						<h4 class="artist"></h4>
+						<div class="album">
+							<p class="album-title"></p>
+							<p class="year"></p>
+						</div>
+						<p class="title-roller">
+							<a target="_blank"></a>
+						</p>
+					</div>
+					<div class="player-wrapper">
+						<div class="player">
+							<div class="load-progress">
+								<div class="play-progress"></div>
+							</div>
+						</div>
+					</div>
+					<div class="controller">
+						<div class="volume-wrapper">
+							<div class="volume">
+								<div class="current-volume"></div>
+							</div>
+							<p class="time"></p>
+						</div>
+						<div class="btn-group">
+							<a class="btn prev" href="#"></a>
+							<a class="btn heart" href="#"></a>
+							<a class="btn trash" href="#"></a>
+							<a class="btn next" href="#"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="extra-btn">
+			<a href="#" class="loop off">单曲循环：关</a>
+			<a href="#" class="download" target="_blank"></a>
+		</div>
+	</div>
+	<div id="fm-channel-container" class="preload off"></div>
+	<span class="toogle"></span>
+</div>
+<div id="hint" class="hide">
+	<h2 class="title">Shortcuts:</h2>
+	<ul class="help clearfix">
+		<li class="item">
+			<b class="key">F</b> Favorite / Unlike the song
+		</li>
+		<li class="item">
+			<b class="key">D</b> Trash a song
+		</li>
+		<li class="item">
+			<b class="key">S</b> Skip the song
+		</li>
+		<li class="item">
+			<b class="key">B</b> Previous song
+		</li>
+		<li class="item">
+			<b class="key">L</b> Switch the loop status
+		</li>
+		<li class="item">
+			<b class="key">W</b> Download the song
+		</li>
+		<li class="item">
+			<b class="key">&larr;</b> Rewind 5 sec
+		</li>
+		<li class="item">
+			<b class="key">&rarr;</b> Forward 5 sed
+		</li>
+		<li class="item">
+			<b class="key">&uarr;</b> Vol up
+		</li>
+		<li class="item">
+			<b class="key">&darr;</b> Vol down
+		</li>
+		<li class="item">
+			<b class="key">space</b> Pause / Resume
+		</li>
+		<li class="item">
+			<b class="key">H</b> Help
+		</li>
+	</ul>
+</div>
+<script type="text/template" id="channel-tpl">
+	<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+	<div class="viewport">
+		<div class="overview">
+			<% for(var i = 0, l = infos.length; i<l ; i++) { %>
+			<div class="channel-wrapper">
+				<% if(infos[i].title && infos[i].channels.length ){ %>
+				<h3 class="title"><%= infos[i].title %></h3>
+				<% } %>
+				<ul class="channel-list" data-area="<%= (infos[i].area||'') %>">
+					<% for( var j = 0 , li = infos[i].channels.length , cur=infos[i].channels[j]; j<li ; j++,cur=infos[i].channels[j] ) { %>
+					<li class="channel-item<%= (cur.id===playing ? ' playing' : '') %>" data-name="<%= cur.name %>" data-id="<%= cur.id %>" data-intro="<%= cur.intro %>">
+						<span class="channel">
+							<a class="channel-name"><%= ( infos[i].title ? cur.name+' MHz' : cur.name ) %></a>
+						</span>
+					</li>
+					<% } %>
+				</ul>
+			</div>
+			<% } %>
+		</div>
+	</div>
+</script>
+<script src="dist/script/util.min.js"></script>
+<script src="dist/script/tinyscrollbar.min.js"></script>
+<script src="dist/script/component.min.js"></script>
+<script src="dist/script/view.js"></script>
+</body>
+</html>

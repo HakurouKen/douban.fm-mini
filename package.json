@@ -1,0 +1,16 @@
+{
+	"name" : "douban.fm.mini",
+	"version" : "0.1.0",
+	"author" : "HakurouKen",
+	"description" : "a mini douban.fm chrome extension",
+	"devDependencies":{
+		"grunt":"~0.4.0",
+		"grunt-contrib-sass": "*",
+		"grunt-contrib-cssmin": "*",
+		"grunt-contrib-uglify": "*",
+		"grunt-contrib-connect": "*",
+		"grunt-contrib-copy": "*",
+		"grunt-contrib-clean":"*",
+		"grunt-contrib-watch": "*"
+	}
+}

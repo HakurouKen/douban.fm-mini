@@ -1,0 +1,39 @@
+{
+	"manifest_version": 2,
+
+	"name":"DoubanFM - Mini",
+	"description": "Mini douban.fm",
+	"version": "0.0.1",
+	"author": "Hakurouken",
+	"browser_action": {
+	  "default_icon": "icon.png",
+      "default_popup": "popup.html"
+    },
+	"background":{
+		"page" : "background.html"
+	},
+	"web_accessible_resources": [
+		"dist/*"
+	],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"permissions":[
+		"notifications",
+		"downloads",
+		"cookies",
+		"background",
+		"*://douban.fm/*",
+		"*://*.douban.com/*"
+	],
+	"icons":{
+    	"16":"icon.png",
+    	"48":"icon.png"
+  	},
+  	"commands": {
+      "_execute_browser_action": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+F",
+          "mac": "Command+Shift+F"
+        }
+      }
+	}
+}
