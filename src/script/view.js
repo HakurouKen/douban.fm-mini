@@ -190,6 +190,7 @@
 				player.bind('loadstart',function(){
 					self.refresh();
 				});
+				(new Component([document.body])).init().removeClass('loading');
 				self.refresh();
 				return self;
 			}
@@ -422,6 +423,8 @@
 	}
 
 	function init(){
+		var playerUI, channelUI;
+
 		chrome.extension.sendRequest({
 				action:'init'
 			},function(info){
@@ -433,9 +436,12 @@
 					//console.log(info);
 					player = bg.player;
 					channel = bg.channel;
-					bindHotKey( PlayerUI(player).init() ,player);
-					window.ChannelUITest = ChannelUI(channel).init();
-					ToogleUI( ChannelUITest );
+					playerUI = PlayerUI(player).init();
+					channelUI = ChannelUI(channel).init();
+
+					bindHotKey( playerUI ,player);
+					ToogleUI( channelUI );
+					document.getElementById('fm-player-container').onselectstart = function(){return false;}
 				}
 		});
 	}

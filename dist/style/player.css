@@ -293,3 +293,16 @@
 body {
   width: 540px;
   height: 295px; }
+
+.loading {
+  opacity: .3; }
+  .loading:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 128px;
+    width: 128px;
+    background-image: url(../image/loading.gif);
+    margin-top: -64px;
+    margin-left: -64px; }
