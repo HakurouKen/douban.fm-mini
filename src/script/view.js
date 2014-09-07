@@ -132,25 +132,25 @@
 		});
 
 		return {
-			event: {
-				heart: heart.init(),
-				trash: trash.init(),
-				next: next.init(),
-				prev: prev.init(),
-				pause: pause.init(),
+			btn: {
+				heart: heart.init('#fm-player-container'),
+				trash: trash.init('#fm-player-container'),
+				next: next.init('#fm-player-container'),
+				prev: prev.init('#fm-player-container'),
+				pause: pause.init('#fm-player-container'),
 				resume: resume.init().delegate('.player-container.paused',function(event,dom){
 					dom.removeClass('paused');
 					player.resume();
 				}),
-				volume: volume.init(),
-				progress: progress.init(),
-				cover: cover.init(),
-				loop: loop.init(),
-				download: download.init(),
-				picture: picture.init()
+				volume: volume.init('#fm-player-container'),
+				progress: progress.init('#fm-player-container'),
+				cover: cover.init('#fm-player-container'),
+				loop: loop.init('#fm-player-container'),
+				download: download.init('#fm-player-container'),
+				picture: picture.init('#fm-player-container')
 			},
 			set: function(selector,attr,val){
-				var comp = Util.isString(selector) ? (new Component(selector).init()) : selector;
+				var comp = Util.isString(selector) ? (new Component(selector).init('#fm-player-container')) : selector;
 				if(attr === "text"){
 					comp.text(val)
 				}else{
@@ -163,6 +163,7 @@
 			refresh: function(){
 				var self = this,
 					info = player.getSongInfo(),
+					container = (new Component('.player-container')).init(),
 					album = /\/subject\//.test(info.album) ? "http://music.douban.com" + info.album : info.album;
 					state = player.getState(),
 					pic = info.picture.replace(/\/mpic\//,"\/lpic\/"),
@@ -181,7 +182,7 @@
 					self.set(".download","title","下载 : " + info.title + " - " + info.artist ); // download title
 					self.set(".download","data-href", info.url ); // download link
 					info.like && (new Component('.btn.heart')).init().addClass('hearted');
-					state === 'pause' && (new Component('.player-container')).init().addClass('paused');
+					state === 'pause' ? container.addClass('paused') : container.removeClass('paused');
 				return self;
 			},
 			init: function(){
@@ -196,47 +197,188 @@
 	};
 
 	var ChannelUI = function(channel){
-		var init = function(){
-			channel.init(function(info){
-				var html = Util.render('channel-tpl',{
-					playing: channel.getCurChannel(),
-					infos:[{
-						area: 'system_chls',
-						channels: [{
-							name:'我的私人兆赫',
-							id: 0
-						},{
-							name: '我的红心兆赫',
-							id: -3
-						}]
-					},{
-						title: '我的收藏',
-						area: 'fav_chls',
-						channels: info
-					}]
-				},true);
-				var $channel = (new Component('#fm-channel-container')).init();
-				
-				$channel.dom[0].innerHTML = html;
-				tinyscrollbar( document.getElementById('fm-channel-container') );
-				$channel.removeClass('preload');
-			});
+		var container = (new Component('#fm-channel-container')).init(),
+			myChannel = (new Component('#fm-channel')).init('#fm-channel-container'),
+			searchResult = (new Component('#search-result')).init('#fm-channel-container'),
+			privateChannel = myChannel.children('[data-area="system_chls"]'),
+			channelScroller;
+
+		var showSearchResult = function(){
+				searchResult.css('display','block');
+				myChannel.css('display','none');
+				channelScroller.update();
+			},
+			showMyChannel = function(){
+				myChannel.css('display','block');
+				searchResult.css('display','none');
+				channelScroller.update();
+			};
+
+		// search
+		var search = new Component('#fm-search form','submit',function(event,comp){
+			event.preventDefault();
+			var form = Util.toArray( comp.dom[0] ),
+				data = {}
+				form.forEach(function(input){
+					if(input.type !== 'submit'){
+						data[input.name] = input.value;
+					}
+				});
+			channel.search(data,function(chls){
+				//console.log(chls);
+				var html = Util.render('search-result-tpl',{
+					keyword: data.keyword,
+					result: chls
+				});
+				searchResult.html(html);
+				showSearchResult();
+			})
+		});
+
+		var change = function(id){
+			return myChannel.children( '[data-id="' + id + '"]>.channel' ).trigger();
 		};
 
-		var container = (new Component('#fm-channel-container')).init();
+		var addChannel = function(info,area,chg){
+			var html,
+				sysChls = myChannel.children('[data-area="'+area+'"]'),
+				chl = sysChls.children( '[data-id="' + info.id + '"]' );
+			if(chl.dom.length){
+				chg && change(info.id);
+				return chl;
+			} else {
+				html = Util.render('single-channel-tpl',{info:info});
+				sysChls.append(html);
+				chg && change(info.id);
+				channelScroller.update();
+				return sysChls.children('[data-id="' + info.id + '"]');
+			}
+		};
+
+		var removeChannel = function(id,area){
+			var selector = '[data-id="' + id + '"]';
+			if(!!area){
+				selector = '[data-area="'+area+'"] ' + selector;
+			}
+			return (new Component(selector)).init().remove();
+		};
+
+		var dealAllPlaying = function(){
+			return (new Component('[data-id="' + channel.getCurChannel() + '"]')).init().addClass('playing');
+		}
+
+		// return from search result to channel list
+		searchResult.delegate('.return',function(){
+			showMyChannel();
+		}).init();
+
+		// click to change channel
+		myChannel.delegate('li.channel-item>.channel',function(event,dom){
+			var item = dom.parent(),
+				d = item.dom[0] || {},
+				id = d.getAttribute('data-id'),
+				area = d.parentElement.getAttribute('data-area');
+			myChannel.children('li.channel-item.playing').removeClass('playing');
+			item.addClass('playing');
+			channel.changeChannel(id,area);
+		});
+		
+		// click to add search result to my channel
+		searchResult.delegate('.channel-item',function(event,chl){
+			var dom = chl.dom[0],
+				info = {};
+			
+			info.name = dom.dataset.name;
+			info.id = dom.dataset.cid;
+			info.num = parseInt( dom.dataset.songnum );
+			info.intro = dom.dataset.intro;
+			// console.log(info);
+			addChannel(info,'system_chls',true);
+		});
+
+		// lazy added the status of the channel
+		myChannel.delegate('li.channel-item','mouseover',function(event,comp){
+			var dom = comp.dom[0],
+				id = parseInt(dom.dataset.id);
+			if( id<=0 ){
+				return comp;
+			}
+
+			if( channel.isFav(id) ){
+				comp.removeClass('unfav').addClass('fav');
+			} else {
+				comp.removeClass('fav').addClass('unfav');
+			}
+			return comp;
+		});
+
+		// fav or unfav a channel
+		myChannel.delegate('li.channel-item .opt',function(event,comp){
+			var parent = comp.parent(),
+				item = comp.dom[0].parentElement,
+				id = item.dataset.id,
+				info = {
+					id: id,
+					name: item.dataset.name,
+					intro: item.dataset.intro
+				};
+			if( parent.hasClass('unfav') ){
+				channel.fav(id,function(){
+					addChannel(info,'fav_chls');
+					dealAllPlaying();
+				});
+			} else if ( parent.hasClass('fav') ){
+				channel.unfav(id,function(){
+					removeChannel(id,'fav_chls');
+					addChannel(info,'system_chls');
+					dealAllPlaying();
+				});
+			}
+			parent.toogleClass('fav').toogleClass('unfav');
+		});
+		
 		return {
 			event:{
-				change: container.delegate('li.channel-item',function(event,dom){
-					var d = dom.dom[0] || {},
-						id = d.getAttribute('data-id'),
-						area = d.parentElement.getAttribute('data-area');
-					container.children('li.channel-item.playing').removeClass('playing');
-					dom.addClass('playing');
-					channel.changeChannel(id,area);
-				})
+				search: search.init('#fm-channel-container'),
+				change: function(id){
+					change(id);
+					return this;
+				},
 			},
 			init: function(){
-				init();
+				channel.init(function(chls){
+					// console.log(channels);
+					var sys = chls.sys.slice(0);
+					var cur = channel.getCurInfo(),
+						infos = [{
+							area: 'system_chls',
+							channels: sys,
+						},{
+							title: '我的收藏',
+							area: 'fav_chls',
+							channels: chls.fav
+						},{
+							title: '热门歌曲',
+							area: 'recent_chls',
+							channels: chls.hot
+						},{
+							title: '上升最快',
+							area: 'recent_chls',
+							channels: chls.trend
+						}];
+
+					channel.isMine(cur.id) || sys.push(cur);
+
+					var html = Util.render('channel-tpl',{
+						playing: channel.getCurChannel(),
+						infos: infos
+					},true);
+					var $channel = (new Component('#fm-channel')).init();
+					
+					$channel.html(html);
+					channelScroller = tinyscrollbar( document.getElementById('fm-channel-container') );
+					container.removeClass('preload');
+				});
 				return this;
 			},
 			status: function(){
@@ -249,6 +391,19 @@
 			off: function(){
 				container.addClass('off');
 				return this;
+			},
+			search: {
+				on: function(){
+					myChannel.css('display','none');
+					searchResult.css('display','block');
+					channelScroller.update();
+				},
+				off: function(){
+					myChannel.css('display','block');
+					searchResult.css('display','none');
+					channelScroller.update();
+					return this;
+				}
 			}
 		}
 	};
@@ -279,7 +434,8 @@
 					player = bg.player;
 					channel = bg.channel;
 					bindHotKey( PlayerUI(player).init() ,player);
-					ToogleUI( ChannelUI(channel).init() );
+					window.ChannelUITest = ChannelUI(channel).init();
+					ToogleUI( ChannelUITest );
 				}
 		});
 	}
@@ -297,32 +453,32 @@
 
 			switch (event.keyCode) {
 				case 70: // f(avorite)
-					FM.event.heart.trigger();
+					FM.btn.heart.trigger();
 					break;
 
 				case 68: // d(elete)
-					FM.event.trash.trigger();
+					FM.btn.trash.trigger();
 					break;
 
 				case 83: // s(kip)
-					FM.event.next.trigger();
+					FM.btn.next.trigger();
 					break;
 
 				case 66: // b(ack)
-					FM.event.prev.trigger();
+					FM.btn.prev.trigger();
 					break;
 
 				case 32: // space
 					player.getState() === 'pause' ? 
-						FM.event.resume.delegateTrigger() : FM.event.pause.trigger();
+						FM.btn.resume.delegateTrigger() : FM.btn.pause.trigger();
 					break;
 
 				case 76: // l(oop)
-					FM.event.loop.trigger();
+					FM.btn.loop.trigger();
 					break;
 
 				case 87: // do(w)nload
-					FM.event.download.trigger();
+					FM.btn.download.trigger();
 					break;
 					
 				case 37: // Left Arrow

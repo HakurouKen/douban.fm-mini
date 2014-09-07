@@ -36,7 +36,11 @@
 
 		var that = {
 			isAd: function(info){
-				return !/^\/subject\//.test(info.album);
+				try{
+					return !/^\/subject\//.test(info.album);
+				} catch(e) {
+					return false;
+				}
 			},
 			initSong: function(info,isPrev){
 				var self = this,

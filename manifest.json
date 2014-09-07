@@ -25,8 +25,9 @@
 		"*://*.douban.com/*"
 	],
 	"icons":{
-    	"16":"icon.png",
-    	"48":"icon.png"
+    	"16":"icon_16.png",
+    	"48":"icon_48.png",
+    	"128":"icon_128.png"
   	},
   	"commands": {
       "_execute_browser_action": {

@@ -1,0 +1,74 @@
+#search-result {
+  text-align: left;
+  width: 525px; }
+  #search-result .keyword {
+    width: 500px;
+    margin: auto;
+    line-height: 60px;
+    font-size: 14px;
+    text-indent: 2em;
+    border-bottom: 1px dashed #000; }
+  #search-result .no-result {
+    margin: 0 40px;
+    padding: 20px;
+    font-size: 13px;
+    color: #999; }
+  #search-result ul.channel-result {
+    width: 420px;
+    margin: auto; }
+    #search-result ul.channel-result li.channel-item {
+      margin: 20px auto;
+      cursor: pointer; }
+      #search-result ul.channel-result li.channel-item .cover {
+        float: left; }
+        #search-result ul.channel-result li.channel-item .cover > img {
+          width: 45px;
+          height: 45px;
+          border-radius: 45px; }
+      #search-result ul.channel-result li.channel-item .info {
+        margin-left: 65px;
+        position: relative; }
+        #search-result ul.channel-result li.channel-item .info .title {
+          padding-top: 6px;
+          padding-bottom: 6px;
+          font-size: 15px;
+          -webkit-transition: text-shadow .2s ease-out;
+          -moz-transition: text-shadow .2s ease-out;
+          -o-transition: text-shadow .2s ease-out;
+          transition: text-shadow .2s ease-out; }
+        #search-result ul.channel-result li.channel-item .info .intro, #search-result ul.channel-result li.channel-item .info .hotsongs, #search-result ul.channel-result li.channel-item .info .song_num {
+          font-size: 12px;
+          line-height: 18px;
+          color: #888;
+          -webkit-transition: color .3s ease-in-out;
+          -moz-transition: color .3s ease-in-out;
+          -o-transition: color .3s ease-in-out;
+          transition: color .3s ease-in-out; }
+        #search-result ul.channel-result li.channel-item .info a.fav {
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-size: 12px;
+          color: #888;
+          -webkit-transition: color .3s ease-in-out;
+          -moz-transition: color .3s ease-in-out;
+          -o-transition: color .3s ease-in-out;
+          transition: color .3s ease-in-out; }
+        #search-result ul.channel-result li.channel-item .info:hover .title {
+          text-shadow: 0 0 2px rgba(0, 0, 0, 0.3); }
+        #search-result ul.channel-result li.channel-item .info:hover .intro {
+          color: #000; }
+        #search-result ul.channel-result li.channel-item .info:hover a.fav {
+          color: #333; }
+  #search-result span.return {
+    float: right;
+    margin: 5px 40px;
+    padding: 5px;
+    color: #999;
+    cursor: pointer;
+    -webkit-transition: color .3s;
+    -moz-transition: color .3s;
+    -o-transition: color .3s;
+    transition: color .3s; }
+    #search-result span.return:hover {
+      color: #333; }

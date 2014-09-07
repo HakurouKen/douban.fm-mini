@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="dist/style/player.css">
 	<link rel="stylesheet" href="dist/style/hint.css">
 	<link rel="stylesheet" href="dist/style/channel.css">
+	<link rel="stylesheet" href="dist/style/search.css">
 </head>
 <body>
 <div class="wrapper">
@@ -43,21 +44,37 @@
 							<p class="time"></p>
 						</div>
 						<div class="btn-group">
-							<a class="btn prev" href="#"></a>
-							<a class="btn heart" href="#"></a>
-							<a class="btn trash" href="#"></a>
-							<a class="btn next" href="#"></a>
+							<a class="btn prev"></a>
+							<a class="btn heart"></a>
+							<a class="btn trash"></a>
+							<a class="btn next"></a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="extra-btn">
-			<a href="#" class="loop off">单曲循环：关</a>
-			<a href="#" class="download" target="_blank"></a>
+			<a class="loop off">单曲循环：关</a>
+			<a class="download" target="_blank"></a>
 		</div>
 	</div>
-	<div id="fm-channel-container" class="preload off"></div>
+	<div id="fm-channel-container" class="preload off">
+		<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+		<div class="viewport">
+			<div class="overview">
+				<div id="fm-search">
+					<form class="search" method="GET">
+						<div class="search-inner">
+							<input type="text" name="keyword" placeholder="搜索兆赫" />
+							<input type="submit" value title="搜索"/>
+						</div>
+					</form>
+					<div id="search-result" class="clearfix"></div>
+				</div>
+				<div id="fm-channel"></div>
+			</div>
+		</div>
+	</div>
 	<span class="toogle"></span>
 </div>
 <div id="hint" class="hide">
@@ -101,28 +118,61 @@
 		</li>
 	</ul>
 </div>
+<script type="text/template" id="single-channel-tpl">
+	<li class="channel-item" data-name="<%= info.name %>" data-id="<%= info.id %>" data-intro="<%= info.intro %>">
+		<span class="channel">
+			<a class="channel-name"><%= info.name %></a>
+		</span>
+		<a class="opt"></a>
+	</li>
+</script>
 <script type="text/template" id="channel-tpl">
-	<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-	<div class="viewport">
-		<div class="overview">
-			<% for(var i = 0, l = infos.length; i<l ; i++) { %>
-			<div class="channel-wrapper">
-				<% if(infos[i].title && infos[i].channels.length ){ %>
-				<h3 class="title"><%= infos[i].title %></h3>
-				<% } %>
-				<ul class="channel-list" data-area="<%= (infos[i].area||'') %>">
-					<% for( var j = 0 , li = infos[i].channels.length , cur=infos[i].channels[j]; j<li ; j++,cur=infos[i].channels[j] ) { %>
-					<li class="channel-item<%= (cur.id===playing ? ' playing' : '') %>" data-name="<%= cur.name %>" data-id="<%= cur.id %>" data-intro="<%= cur.intro %>">
-						<span class="channel">
-							<a class="channel-name"><%= ( infos[i].title ? cur.name+' MHz' : cur.name ) %></a>
-						</span>
-					</li>
-					<% } %>
-				</ul>
-			</div>
+	<% for(var i = 0, l = infos.length; i<l ; i++) { %>
+		<% if(infos[i].channels.length){ %>
+		<div class="channel-wrapper">
+			<% if(infos[i].title){ %>
+			<h3 class="title"><%= infos[i].title %></h3>
 			<% } %>
+			<ul class="channel-list" data-area="<%= (infos[i].area||'') %>">
+				<% for( var j = 0 , li = infos[i].channels.length , cur=infos[i].channels[j]; j<li ; j++,cur=infos[i].channels[j] ) { %>
+				<li class="channel-item<%= (cur.id===playing ? ' playing' : '') %>" data-name="<%= cur.name %>" data-id="<%= cur.id %>" data-intro="<%= cur.intro %>">
+					<span class="channel">
+						<a class="channel-name" title="<%= cur.name %>"><%= ( infos[i].title ? cur.name+' MHz' : cur.name ) %></a>
+					</span>
+					<% if ( cur.id > 0 ){ %>
+					<a class="opt"></a>
+					<% } %>
+				</li>
+				<% } %>
+			</ul>
 		</div>
-	</div>
+		<% } %>
+	<% } %>
+</script>
+<script id="search-result-tpl" type="text/template">
+	<div class="keyword">与“<%= keyword %>”相关的搜索结果</div>
+	<% if(result.length) {%>
+	<ul class="channel-result clearfix">
+		<% for( var i=0, cur=result[0], l=result.length; i<l; cur=result[++i] ){ %>
+		<li class="channel-item clearfix" data-name="<%= cur.name %>" data-cid="<%= cur.id %>" data-songnum="<%= cur.song_num %>" data-intro="<%= cur.intro %>">
+			<div class="cover"> 
+				<img src="<%= cur.cover %>" alt="<%= cur.name %>">
+			</div>
+			<div class="info">
+				<h4 class="title"><%= cur.name %></h4>
+				<div class="intro"><%= cur.intro %></div>
+				<div class="hotsongs">
+					热门歌曲：<%= (cur.hot_songs.join(" / ")) %>
+				</div>
+				<div class="song_num"><%= cur.song_num %>首歌曲</div>
+			</div>
+		</li>
+		<% } %>
+	</ul>
+	<% } else {%>
+		<p class="no-result">对不起,没有关于"<%= keyword %>"的搜索结果</p>
+	<% } %>
+	<span class="return">返回</span>
 </script>
 <script src="dist/script/util.min.js"></script>
 <script src="dist/script/tinyscrollbar.min.js"></script>

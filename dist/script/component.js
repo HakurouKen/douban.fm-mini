@@ -30,6 +30,7 @@
 	Comp.fn.init = function(root){
 		var self = this;
 		root = ( Util.isString(root) ? document.querySelector(root) : root ) || document;
+		self.root = root;
 		if(!self.selector){
 			return self;
 		}
@@ -70,11 +71,11 @@
 			});
 
 			this.dom.forEach(function(parent){
-				parent.addEventListener(self.eventType,function(event){
+				parent.addEventListener(eventType,function(event){
 					elems = Util.toArray ( parent.querySelectorAll(selector) );
 					for( target=event.target; target !== parent ; target = target.parentNode ){
 						if( elems.indexOf(target)>=0 ){
-							handler( event, (new Component([target])).init() );
+							handler( event, (new Component([target],eventType)).init() );
 							break;
 						}
 					}
@@ -223,6 +224,13 @@
 				Array.prototype.push.apply( children, parent.querySelectorAll(selector) );
 			});
 			return (new Component(children)).init();
+		},
+		parent: function(){
+			var parent = [];
+			this.dom.forEach(function(child){
+				parent.push( child.parentNode );
+			});
+			return (new Component(parent)).init();
 		}
 	});
 
@@ -232,7 +240,7 @@
 		});
 	}
 
-	// display
+	// display and content
 	Comp.fn.extend({
 		css: function(name,value){
 			var o,
@@ -311,12 +319,43 @@
 		},
 
 		text: function(t){
-			var elem = this.dom[0] || {}
+			var elems = this.dom || []
 			if(t == undefined){
-				return elem.textContent;
+				return (elems[0]||{}).textContent;
 			}else{
-				elem.textContent = t;
+				elems.forEach(function(elem){
+					elem.textContent = t;
+				})
 			}
+			return this;
+		},
+
+		html: function(t){
+			var elems = this.dom || []
+			if(t == undefined){
+				return (elems[0]||{}).innerHTML;
+			}else{
+				elems.forEach(function(elem){
+					elem.innerHTML = t;
+				})
+			}
+			return this;
+		},
+		append: function(html){
+			var str = Util.isString(html);
+			this.dom.forEach(function(d){
+				if(str){
+					d.innerHTML = d.innerHTML + html;
+				} else {
+					d.appendChild(html);
+				}
+			});
+			return this;
+		},
+		remove: function(){
+			this.dom.map(function(elem){
+				elem.remove();
+			});
 			return this;
 		}
 	});
