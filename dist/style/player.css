@@ -254,6 +254,8 @@
     text-shadow: 0 0 2px rgba(100, 194, 47, 0.5);
     line-height: 20px;
     vertical-align: middle; }
+    #fm-player-container div.extra-btn a {
+      cursor: pointer; }
     #fm-player-container div.extra-btn a.loop {
       position: relative;
       margin-left: 35px;
