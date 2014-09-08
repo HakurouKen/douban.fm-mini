@@ -163,7 +163,10 @@
 			refresh: function(){
 				var self = this,
 					info = player.getSongInfo(),
-					container = (new Component('.player-container')).init(),
+					isLoop = player.loop(),
+					$heart =  (new Component('.btn.heart')).init('#fm-player-container'),
+					$container = (new Component('.player-container')).init('#fm-player-container'),
+					$loop = (new Component('.loop').init('#fm-player-container')),
 					album = /\/subject\//.test(info.album) ? "http://music.douban.com" + info.album : info.album;
 					state = player.getState(),
 					pic = info.picture.replace(/\/mpic\//,"\/lpic\/"),
@@ -181,8 +184,9 @@
 					self.set(".download","text", title ); // the download link
 					self.set(".download","title","下载 : " + info.title + " - " + info.artist ); // download title
 					self.set(".download","data-href", info.url ); // download link
-					info.like && (new Component('.btn.heart')).init().addClass('hearted');
-					state === 'pause' ? container.addClass('paused') : container.removeClass('paused');
+					info.like ? $heart.addClass('hearted') : $heart.removeClass('hearted');
+					isLoop ? $loop.addClass('on').removeClass('off').text("单曲循环：开") : $loop.addClass('off').removeClass('on').text("单曲循环：关");
+					state === 'pause' ? $container.addClass('paused') : $container.removeClass('paused');
 				return self;
 			},
 			init: function(){
