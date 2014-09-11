@@ -177,6 +177,7 @@
 					text-decoration: none;
 					background-color: transparent;
 					background-image: url(../image/buttons.png);
+					cursor: pointer;
 
 					&.pause{
 						position: absolute;
@@ -443,5 +444,58 @@ body{
 		background-image: url(../image/loading.gif);
 		margin-top: -$size/2;
 		margin-left: -$size/2;
+	}
+}
+
+/* animation */
+@mixin press( $scale:.95 ){
+	@keyframes press{
+		0% {
+			transform: scale3d(1, 1, 1);
+		}
+
+		50% {
+			transform: scale3d(.95, .95, .95);
+		}
+
+		100% {
+			transform: scale3d(1, 1, 1);
+		}
+	}
+
+	@-moz-keyframes press{
+		0% {
+			transform: scale3d(1, 1, 1);
+		}
+
+		50% {
+			transform: scale3d(.95, .95, .95);
+		}
+
+		100% {
+			transform: scale3d(1, 1, 1);
+		}
+	}
+
+	@-webkit-keyframes press{
+		0% {
+			transform: scale3d(1, 1, 1);
+		}
+
+		50% {
+			transform: scale3d(.95, .95, .95);
+		}
+
+		100% {
+			transform: scale3d(1, 1, 1);
+		}
+	}
+}
+@include press();
+
+.pressable{
+	&:active{
+		-webkit-animation: press .3s;
+		animation: press .3s;
 	}
 }

@@ -446,6 +446,7 @@
 					bindHotKey( playerUI ,player);
 					ToogleUI( channelUI );
 					document.getElementById('fm-player-container').onselectstart = function(){return false;}
+					document.getElementById('fm-channel').onselectstart = function(){return false;}
 				}
 		});
 	}

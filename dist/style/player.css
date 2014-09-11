@@ -130,7 +130,8 @@
           vertical-align: top;
           text-decoration: none;
           background-color: transparent;
-          background-image: url(../image/buttons.png); }
+          background-image: url(../image/buttons.png);
+          cursor: pointer; }
           #fm-player-container div.fm-player div.player-container div.content a.btn.pause {
             position: absolute;
             top: -1px;
@@ -308,3 +309,35 @@ body {
     background-image: url(../image/loading.gif);
     margin-top: -64px;
     margin-left: -64px; }
+
+/* animation */
+@keyframes press {
+  0% {
+    transform: scale3d(1, 1, 1); }
+
+  50% {
+    transform: scale3d(0.95, 0.95, 0.95); }
+
+  100% {
+    transform: scale3d(1, 1, 1); } }
+@-moz-keyframes press {
+  0% {
+    transform: scale3d(1, 1, 1); }
+
+  50% {
+    transform: scale3d(0.95, 0.95, 0.95); }
+
+  100% {
+    transform: scale3d(1, 1, 1); } }
+@-webkit-keyframes press {
+  0% {
+    transform: scale3d(1, 1, 1); }
+
+  50% {
+    transform: scale3d(0.95, 0.95, 0.95); }
+
+  100% {
+    transform: scale3d(1, 1, 1); } }
+.pressable:active {
+  -webkit-animation: press .3s;
+  animation: press .3s; }
