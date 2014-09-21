@@ -4,7 +4,6 @@
 	$player_width: 510px;
 	$img_size: 245px;
 	width: $player_width;
-	height: $img_size;
 	margin: 15px auto;
 	-webkit-user-select: none;
 	
@@ -21,9 +20,6 @@
 	div.fm-player{
 		$player_radius: 3px;
 
-		position: absolute;
-		top: 0;
-		left: 0;
 		width: 510px;
 		height: 245px;
 		line-height: 1.35;
@@ -360,8 +356,7 @@
 	}
 
 	div.extra-btn{
-		position: relative;
-		top: $img_size + 3px;
+		padding-top: 3px;
 		font-size: 14px;
 		text-shadow: 0 0 2px rgba(100, 194, 47, 0.5);
 		line-height: 20px;

@@ -5,9 +5,11 @@
 	<title>Douban FM</title>
 	<link rel="stylesheet" href="dist/style/reset.min.css">
 	<link rel="stylesheet" href="dist/style/player.min.css">
-	<link rel="stylesheet" href="dist/style/hint.min.css">
 	<link rel="stylesheet" href="dist/style/channel.min.css">
+	<link rel="stylesheet" href="dist/style/lyric.min.css">
 	<link rel="stylesheet" href="dist/style/search.min.css">
+	<link rel="stylesheet" href="dist/style/toggle.min.css">
+	<link rel="stylesheet" href="dist/style/hint.min.css">
 </head>
 <body class="loading">
 <div class="wrapper">
@@ -55,6 +57,7 @@
 		</div>
 		<div class="extra-btn">
 			<a class="loop off">单曲循环：关</a>
+			<a id="show-lyric">歌词</a>
 			<a class="download" target="_blank"></a>
 		</div>
 	</div>
@@ -74,6 +77,10 @@
 				<div id="fm-channel"></div>
 			</div>
 		</div>
+	</div>
+	<div id="fm-lyric-container">
+		<div id="lyric-container"></div>
+		<a class="close" title="隐藏歌词"></a>
 	</div>
 	<span class="toogle"></span>
 </div>
@@ -149,7 +156,7 @@
 		<% } %>
 	<% } %>
 </script>
-<script id="search-result-tpl" type="text/template">
+<script type="text/template" id="search-result-tpl">
 	<div class="keyword">与“<%= keyword %>”相关的搜索结果</div>
 	<% if(result.length) {%>
 	<ul class="channel-result clearfix">
@@ -173,6 +180,15 @@
 		<p class="no-result">对不起,没有关于"<%= keyword %>"的搜索结果</p>
 	<% } %>
 	<span class="return">返回</span>
+</script>
+<script id="lyric-tpl" type="text/template">
+	<div class="lyric-wrapper<%= ( lrc.length ? '' : ' no-lyric' ) %>">
+		<ul class="lyrics">
+			<% for(var i = 0, l = lrc.length ; i < l ; i++ ){ %>
+			<li class="lrc" data-time="<%= lrc[i].time %>"><%= lrc[i].lrc%></li>
+			<% } %>
+		</ul>
+	</div>
 </script>
 <script src="dist/script/util.min.js"></script>
 <script src="dist/script/tinyscrollbar.min.js"></script>

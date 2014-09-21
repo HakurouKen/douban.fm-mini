@@ -231,6 +231,10 @@
 				parent.push( child.parentNode );
 			});
 			return (new Component(parent)).init();
+		},
+		eq: function(i){
+			var elem = this.dom[i] ? [ this.dom[i] ] : [];
+			return (new Component( elem )).init();
 		}
 	});
 

@@ -2,7 +2,6 @@
   background-color: white;
   position: relative;
   width: 510px;
-  height: 245px;
   margin: 15px auto;
   -webkit-user-select: none; }
   #fm-player-container a {
@@ -12,9 +11,6 @@
     #fm-player-container a:hover {
       background: transparent; }
   #fm-player-container div.fm-player {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 510px;
     height: 245px;
     line-height: 1.35;
@@ -249,8 +245,7 @@
         text-align: center;
         opacity: 0.8; }
   #fm-player-container div.extra-btn {
-    position: relative;
-    top: 248px;
+    padding-top: 3px;
     font-size: 14px;
     text-shadow: 0 0 2px rgba(100, 194, 47, 0.5);
     line-height: 20px;

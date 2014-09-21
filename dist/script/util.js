@@ -36,13 +36,23 @@ var Util = (function(window,document,undefined){
 			data = serialize( option.data || {} ),
 			beforeSend = option.beforeSend || option.beforesend || function(){},
 			error = option.error || function(){},
-			success = option.success || function(data){};
+			success = option.success || function(data){},
+			key,
+			headers = option.headers || {};
 
 		url +=  method === "GET" && data !== "" ?
 			"?" + data : "";
 
 		var xhr = new XMLHttpRequest();
 		xhr.open(method,url,true);
+		
+		method === "POST" && xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		for( key in headers ){
+			if( headers.hasOwnProperty(key) ){
+				xhr.setRequestHeader(key,headers[key]);
+			}
+		}
+
 		xhr.onreadystatechange=function(){
 			if(xhr.readyState == 4){
 				if( xhr.status==200 ){
@@ -92,12 +102,6 @@ var Util = (function(window,document,undefined){
 
 			return data ? fn( data ) : fn ;
 	};
-
-	var observe = function(){
-		if(Object.observe){
-			Object.observe.apply(Util,arguments);
-		}
-	}
 
 	return {
 		type: type,

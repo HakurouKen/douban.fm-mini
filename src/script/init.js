@@ -2,6 +2,7 @@
 	window.init = function(){
 		window.player = Player();
 		window.channel = Channel(player);
+		window.lyric = Lyric(player);
 
 		chrome.cookies.getAll({url:"http://douban.fm"}, function (cks){
 			cks.forEach(function(ck){

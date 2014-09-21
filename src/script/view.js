@@ -2,6 +2,7 @@
 	var bg = chrome.extension.getBackgroundPage();
 	window.player = {};
 	window.channel = {};
+	window.lyric = {};
 
 	var PlayerUI = function(player){
 		// cache the dom for speed.
@@ -170,9 +171,24 @@
 					album = /\/subject\//.test(info.album) ? "http://music.douban.com" + info.album : info.album;
 					state = player.getState(),
 					pic = info.picture.replace(/\/mpic\//,"\/lpic\/"),
-					title = info.title + " - " + info.artist;
-					title = title.length > 25 ? title.slice(0,23)+'...' : title;
-
+					overflowText = function(limit,str){
+						var i=0,
+							l = str.length,
+							len = 0;
+						for( ; len <= limit && i < l ; i++ ){
+							if(str.charAt(i).match(/[^\x00-\xff]/ig) !== null){
+								len+=2;
+							} else {
+								len++;
+							}
+						}
+						if (len > limit){
+							str = str.substring(0, i - 1) + "...";
+						}
+						return str;
+					},
+					title = overflowText(25,info.title + " - " + info.artist);
+					
 					self.set("div.cover>img","src",pic); // img link
 					self.set("div.cover>img","alt",info.title); // img alternative
 					self.set(".cover","data-album","http://music.douban.com"+info.album); // album link
@@ -191,7 +207,7 @@
 			},
 			init: function(){
 				var self = this;
-				player.bind('loadstart',function(){
+				player.bind('loadedmetadata',function(){
 					self.refresh();
 				});
 				(new Component([document.body])).init().removeClass('loading');
@@ -413,6 +429,67 @@
 		}
 	};
 
+	var LyricUI = function(lyric){
+		var lyrics,lrcs,
+			curLrc,
+			height,
+			container = (new Component('#fm-lyric-container')).init(),
+			timeupdate = function(time,percent){
+				curLrc = lyric.curLrc();
+				var index = curLrc.index(),
+					cur = lrcs.eq(index);
+				lyrics.css({
+					'margin-top': - height * (index + (time - curLrc.startTime())/(curLrc.endTime()-curLrc.startTime())) + 'px'
+				});
+				if( !cur.hasClass('on') ){
+					lrcs.removeClass('on');
+					cur.addClass('on');
+				}
+			};
+
+		var show = new Component('#show-lyric',function(){
+				container.removeClass('hide').addClass('show');
+			}),
+			hide = new Component('a.close',function(){
+				container.removeClass('show').addClass('hide');
+			});
+
+		// adjust the lyrics	
+		container.delegate('ul.lyrics',
+			document.hasOwnProperty('onmousewheel') ? 'mousewheel' : 'DOMMouseScroll',function(event){
+				if( event.wheelDelta > 0 ){
+					lyric.fix(0.1);
+				} else {
+					lyric.fix(-0.1);
+				}
+			}
+		)
+
+		return {
+			event:{
+				show: show.init(),
+				hide: hide.init('#fm-lyric-container')
+			},
+			init: function(){
+				var self = this;
+				lyric.init(function(lrc,link){
+					document.getElementById('lyric-container').innerHTML = Util.render('lyric-tpl', {lrc:lrc||[]});
+					if( lrc ){
+						lyrics = (new Component('ul.lyrics')).init('#fm-lyric-container');
+						lrcs = lyrics.children('li.lrc').init('#fm-lyric-container');
+						height = lrcs.height();
+						self.update(function(time,percent){
+							timeupdate(time,percent);
+						});
+					}
+				});
+			},
+			update: function(callback){
+				lyric.update(callback);
+			}
+		}
+	}
+
 	var ToogleUI = function(ChannelUI){
 		var toogle = new Component('.toogle',function(event,dom){
 			if( ChannelUI.status() === 'on' ){
@@ -440,8 +517,10 @@
 					//console.log(info);
 					player = bg.player;
 					channel = bg.channel;
+					lyric = bg.lyric;
 					playerUI = PlayerUI(player).init();
 					channelUI = ChannelUI(channel).init();
+					LyricUI = LyricUI(lyric).init();
 
 					bindHotKey( playerUI ,player);
 					ToogleUI( channelUI );

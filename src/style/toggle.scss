@@ -1,0 +1,45 @@
+/* bottom nav toggle */
+.toogle{
+	$btnHeight: 15px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: $btnHeight;
+	background-color: #C8C8C8;
+	opacity: .1;
+	-webkit-transition: opacity .3s ease-out;
+	-moz-transition: opacity .3s ease-out;
+	-ms-transtion: opacity .3s ease-out;
+	-o-transition: opacity .3s ease-out;
+	transition: opacity .3s ease-out;
+	z-index: 999;
+
+	&:after{
+		$width: 40px;
+		content: '\fe3f';
+		position: absolute;
+		top: -3px;
+		left: 50%;
+		width: $width;
+		margin-left: -$width/2;
+		text-align: center;
+		height: $btnHeight;
+		line-height: $btnHeight;
+		font-weight: bold;
+		-webkit-transition: transform .3s ease-out, top .3s ease-out;
+		-moz-transition: transform .3s ease-out, top .3s ease-out;
+		-ms-transition: transform .3s ease-out, top .3s ease-out;
+		-o-transition: transform .3s ease-out, top .3s ease-out;
+		transition: transform .3s ease-out, top .3s ease-out;
+	}
+
+	&.on:after{
+		transform: rotate(180deg);
+		top: 6px;
+	}
+
+	&:hover{
+		opacity: .3;
+	}
+}

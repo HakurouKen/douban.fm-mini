@@ -231,7 +231,7 @@
 		};
 
 		/* event listener : data-binder*/
-		_aud.addEventListener('loadstart',function(){
+		_aud.addEventListener('loadedmetadata',function(){
 			_state = _aud.paused ? "paused" : "playing";
 			_length = _aud.duration;
 			_loadingProgress;

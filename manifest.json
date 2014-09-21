@@ -22,7 +22,9 @@
 		"cookies",
 		"background",
 		"*://douban.fm/*",
-		"*://*.douban.com/*"
+		"*://*.douban.com/*",
+		"*://sug.music.baidu.com/*",
+		"*://play.baidu.com/*"
 	],
 	"icons":{
     	"16":"icon_16.png",
