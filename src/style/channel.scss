@@ -58,16 +58,6 @@ form{
 	}
 }
 
-
-/*
- * the fm channel section
- */
-.overview, .scrollbar .track .thumb{
-	-webkit-transition: top .3s ease-out;
-	-moz-transition: top .3s ease-out;
-	transition: top .3s ease-out;	
-}
-
 .overview{
 	padding: 40px 0px;
 	margin: 0;	
@@ -235,6 +225,7 @@ form{
 		position: absolute;
 		top: 0;
 		left: -5px;
+		cursor: default;
 
 		.end{
 			background: transparent url(../image/bg-scrollbar-thumb-y.png) no-repeat 50% 0;

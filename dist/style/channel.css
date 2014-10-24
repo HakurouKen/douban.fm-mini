@@ -42,14 +42,6 @@ form input[type=text] {
     box-shadow: 0 0 2px 1px #969696;
     outline: none; }
 
-/*
- * the fm channel section
- */
-.overview, .scrollbar .track .thumb {
-  -webkit-transition: top .3s ease-out;
-  -moz-transition: top .3s ease-out;
-  transition: top .3s ease-out; }
-
 .overview {
   padding: 40px 0px;
   margin: 0; }
@@ -178,7 +170,8 @@ form input[type=text] {
   overflow: hidden;
   position: absolute;
   top: 0;
-  left: -5px; }
+  left: -5px;
+  cursor: default; }
   #fm-channel-container .thumb .end {
     background: transparent url(../image/bg-scrollbar-thumb-y.png) no-repeat 50% 0;
     overflow: hidden;
