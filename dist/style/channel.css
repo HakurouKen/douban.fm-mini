@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
  * the search bar and serach result section
  */
@@ -13,7 +14,8 @@
       #fm-search form.search .search-inner input[type=text] {
         width: 240px;
         font-size: 14px;
-        text-shadow: 0 0 2px rgba(0, 0, 0, 0.2); }
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+        font-family: Helvetica,Tahoma,Arial,"Microsoft YaHei","微软雅黑","WenQuanYi Mircro Hei","文泉驿微米黑",SimSun,"宋体",Heiti,"黑体",sans-serif; }
       #fm-search form.search .search-inner input[type=submit] {
         position: absolute;
         top: 5px;
